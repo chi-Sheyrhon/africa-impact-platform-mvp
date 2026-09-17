@@ -1,0 +1,76 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+{{ project.name }}
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ project.name }}</h1>
+
+<p style="margin: 20px 0; line-height: 1.7;">
+    {{ project.description }}
+</p>
+
+<div class="card">
+
+    <p>
+        <strong>Country:</strong>
+        {{ project.country }}
+    </p>
+
+    <p>
+        <strong>Location:</strong>
+        {{ project.location }}
+    </p>
+
+    <p>
+        <strong>Impact Area:</strong>
+        {{ project.get_impact_area_display }}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        {{ project.get_status_display }}
+    </p>
+
+</div>
+
+<h2 style="margin-top: 40px;">
+    Impact Metrics
+</h2>
+
+<div class="projects" style="margin-top: 20px;">
+
+    {% for record in project.impact_records.all %}
+
+        <div class="card">
+
+            <h3>{{ record.metric }}</h3>
+
+            <p>
+                <strong>{{ record.value }}</strong>
+                {{ record.unit }}
+            </p>
+
+            <p>
+                Recorded: {{ record.recorded_at }}
+            </p>
+
+        </div>
+
+    {% empty %}
+
+        <p>
+            No impact metrics have been recorded yet.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+<a href="{% url 'project_list' %}" class="button">
+    ← Back to Projects
+</a>
+
+{% endblock %}

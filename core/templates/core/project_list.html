@@ -1,0 +1,61 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+Impact Projects
+{% endblock %}
+
+{% block content %}
+
+<h1>Impact Projects</h1>
+
+<p style="margin: 15px 0 30px;">
+    Explore projects making a difference across African communities.
+</p>
+
+<div class="projects">
+
+    {% for project in projects %}
+
+        <div class="card">
+
+            <h3>{{ project.name }}</h3>
+
+            <p>
+                {{ project.description|truncatewords:25 }}
+            </p>
+
+            <p>
+                <strong>Country:</strong>
+                {{ project.country }}
+            </p>
+
+            <p>
+                <strong>Impact Area:</strong>
+                {{ project.get_impact_area_display }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                {{ project.get_status_display }}
+            </p>
+
+            <a
+                href="{% url 'project_detail' project.id %}"
+                class="button"
+            >
+                View Project
+            </a>
+
+        </div>
+
+    {% empty %}
+
+        <p>
+            No impact projects have been added yet.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
