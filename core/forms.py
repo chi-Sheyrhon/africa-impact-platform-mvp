@@ -63,6 +63,7 @@ class ImpactRecordForm(forms.ModelForm):
                 attrs={
                     "placeholder": "e.g. 500",
                     "step": "any",
+                    "min": "0",
                 }
             ),
 
@@ -78,3 +79,47 @@ class ImpactRecordForm(forms.ModelForm):
                 }
             ),
         }
+
+    def clean_metric(self):
+        metric = self.cleaned_data["metric"].strip()
+
+        if not metric:
+            raise forms.ValidationError(
+                "Metric name cannot be empty."
+            )
+
+        return " ".join(metric.split()).title()
+
+    def clean_value(self):
+        value = self.cleaned_data["value"]
+
+        if value < 0:
+            raise forms.ValidationError(
+                "Impact value cannot be negative."
+            )
+
+        return value
+
+    def clean_unit(self):
+        unit = self.cleaned_data["unit"].strip()
+
+        if not unit:
+            raise forms.ValidationError(
+                "Unit cannot be empty."
+            )
+
+        return " ".join(unit.split()).lower()
+
+    
+
+    def clean_recorded_at(self):
+        recorded_at = self.cleaned_data["recorded_at"]
+
+        from django.utils import timezone
+
+        if recorded_at > timezone.localdate():
+            raise forms.ValidationError(
+                "Recorded date cannot be in the future."
+            )
+
+        return recorded_at
