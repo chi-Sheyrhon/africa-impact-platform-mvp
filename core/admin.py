@@ -1,41 +1,40 @@
 from django.contrib import admin
 
-# Register your models here.
-
-
 from .models import ImpactProject, ImpactRecord
+
 
 @admin.register(ImpactProject)
 class ImpactProjectAdmin(admin.ModelAdmin):
-    lsit_display =(
+    list_display = (
         "name",
         "country",
-        "location",
         "impact_area",
         "status",
-        "created_at",
+        "start_date",
+        "source_organization",
     )
 
-    list_filter =(
-        "impact_area",
-        "status",
+    list_filter = (
         "country",
+        "impact_area",
+        "status",
+        "source_organization",
     )
 
-
-    search_fields=(
+    search_fields = (
         "name",
         "description",
-        "country",
         "location",
+        "source_organization",
+        "external_project_id",
     )
+
 
 @admin.register(ImpactRecord)
 class ImpactRecordAdmin(admin.ModelAdmin):
-
     list_display = (
-        "project",
         "metric",
+        "project",
         "category",
         "value",
         "unit",

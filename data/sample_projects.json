@@ -1,0 +1,28 @@
+[
+    {
+        "name": "Sample Cameroon Education Project",
+        "description": "Sample project used to test bulk data ingestion.",
+        "country": "Cameroon",
+        "location": "North-West Region",
+        "impact_area": "education",
+        "status": "active",
+        "start_date": "2023-03-15",
+        "end_date": null,
+        "source_organization": "Sample Organization",
+        "source_url": "https://example.org/cameroon-project",
+        "external_project_id": "TEST-CM-001"
+    },
+    {
+        "name": "Sample Kenya Digital Project",
+        "description": "Sample project used to test bulk data ingestion.",
+        "country": "Kenya",
+        "location": "Nairobi",
+        "impact_area": "technology",
+        "status": "active",
+        "start_date": "2023-07-10",
+        "end_date": null,
+        "source_organization": "Sample Organization",
+        "source_url": "https://example.org/kenya-project",
+        "external_project_id": "TEST-KE-001"
+    }
+]

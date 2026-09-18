@@ -1,10 +1,11 @@
 from django.db import models
+from django.db.models import Q
 
-# Create your models here.
 
 class ImpactProject(models.Model):
-    AFRICAN_COUNTRIES=[
-         ("Algeria", "Algeria"),
+
+    AFRICAN_COUNTRIES = [
+        ("Algeria", "Algeria"),
         ("Angola", "Angola"),
         ("Benin", "Benin"),
         ("Botswana", "Botswana"),
@@ -59,46 +60,99 @@ class ImpactProject(models.Model):
         ("Zambia", "Zambia"),
         ("Zimbabwe", "Zimbabwe"),
     ]
-    
-    IMPACT_AREAS=[
-        ('education', 'Education'),
-        ('health', 'Health'),
-        ('agriculture', 'Agriculture'),
-        ('environment', 'Environment'),
-        ('technology', 'Technology'),
-        ('employment', 'Employment'),
-        ('other', 'Other'),
-        ]
-    STATUS_CHOICES=[
-        ('planned', 'Planned'),
-        ('active', 'Active'),
-        ('completed', 'Completed'),
-    ]
-    name = models.CharField(max_length = 200)
-    description = models.TextField()
 
+    IMPACT_AREAS = [
+        ("education", "Education"),
+        ("health", "Health"),
+        ("agriculture", "Agriculture"),
+        ("environment", "Environment"),
+        ("technology", "Technology"),
+        ("employment", "Employment"),
+        ("other", "Other"),
+    ]
+
+    STATUS_CHOICES = [
+        ("planned", "Planned"),
+        ("active", "Active"),
+        ("completed", "Completed"),
+    ]
+
+    name = models.CharField(max_length=200)
+
+    description = models.TextField()
 
     country = models.CharField(
         max_length=100,
-        choices=AFRICAN_COUNTRIES,)
-    location = models.CharField(max_length=200)
+        choices=AFRICAN_COUNTRIES,
+    )
 
+    location = models.CharField(max_length=200)
 
     impact_area = models.CharField(
         max_length=50,
         choices=IMPACT_AREAS,
-        )
+    )
+
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default="planned",
+    )
+
+    # Real-world project timeline
+    start_date = models.DateField(
+        null=True,
+        blank=True,
+    )
+
+    end_date = models.DateField(
+        null=True,
+        blank=True,
+    )
+
+    # Information source
+    source_organization = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+
+    source_url = models.URLField(
+        blank=True,
+    )
+
+    # ID/code assigned by the original organization
+    external_project_id = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+
+    # Date the project was added to Africa Impact Platform
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+     constraints = [
+        models.UniqueConstraint(
+            fields=[
+                "source_organization",
+                "external_project_id",
+            ],
+            condition=(
+                Q(source_organization__gt="")
+                & Q(external_project_id__gt="")
+            ),
+            name="unique_source_project",
         )
+    ]
 
 
-    created_at = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.name
+
+
 class ImpactRecord(models.Model):
 
     METRIC_CATEGORIES = [
@@ -139,4 +193,3 @@ class ImpactRecord(models.Model):
 
     def __str__(self):
         return f"{self.metric} - {self.value} {self.unit}"
-    

@@ -1,3 +1,8 @@
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from .serializers import ImpactProjectSerializer
 from django.contrib import messages
 from django.db.models import Count, Q, Sum
 from django.shortcuts import get_object_or_404, render
@@ -276,4 +281,118 @@ def add_impact_record(request, project_id):
             "form": form,
             "project": project,
         },
+    )
+
+@api_view(["GET", "POST"])
+def api_projects(request):
+    if request.method == "GET":
+        projects = ImpactProject.objects.all().order_by("-start_date")
+        serializer = ImpactProjectSerializer(
+            projects,
+            many=True
+        )
+        return Response(serializer.data)
+
+    serializer = ImpactProjectSerializer(
+        data=request.data
+    )
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
+
+    return Response(
+        serializer.errors,
+        status=status.HTTP_400_BAD_REQUEST
+    )
+
+@api_view(["POST"])
+def api_bulk_projects(request):
+
+    if not isinstance(request.data, list):
+        return Response(
+            {
+                "error": "Expected a JSON list of projects."
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    created_projects = []
+    updated_projects = []
+    errors = []
+
+    for index, project_data in enumerate(request.data):
+
+        source_organization = project_data.get(
+            "source_organization"
+        )
+
+        external_project_id = project_data.get(
+            "external_project_id"
+        )
+
+        if not source_organization or not external_project_id:
+            errors.append({
+                "index": index,
+                "error": (
+                    "source_organization and "
+                    "external_project_id are required."
+                ),
+            })
+            continue
+
+        existing_project = ImpactProject.objects.filter(
+            source_organization=source_organization,
+            external_project_id=external_project_id,
+        ).first()
+
+        if existing_project:
+
+            serializer = ImpactProjectSerializer(
+                existing_project,
+                data=project_data,
+                partial=True,
+            )
+
+            if serializer.is_valid():
+                serializer.save()
+                updated_projects.append(
+                    serializer.data
+                )
+            else:
+                errors.append({
+                    "index": index,
+                    "errors": serializer.errors,
+                })
+
+        else:
+
+            serializer = ImpactProjectSerializer(
+                data=project_data
+            )
+
+            if serializer.is_valid():
+                project = serializer.save()
+                created_projects.append(
+                    serializer.data
+                )
+            else:
+                errors.append({
+                    "index": index,
+                    "errors": serializer.errors,
+                })
+
+    return Response(
+        {
+            "created": len(created_projects),
+            "updated": len(updated_projects),
+            "failed": len(errors),
+            "created_projects": created_projects,
+            "updated_projects": updated_projects,
+            "errors": errors,
+        },
+        status=status.HTTP_201_CREATED,
     )
