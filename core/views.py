@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render
 
 from .models import ImpactProject, ImpactRecord
 
-from .forms import ImpactProjectForm
+from .forms import ImpactProjectForm, ImpactRecordForm
 
 
 def home(request):
@@ -232,5 +232,48 @@ def submit_project(request):
         "core/submit_project.html",
         {
             "form": form,
+        },
+    )
+
+
+def add_impact_record(request, project_id):
+
+    project = get_object_or_404(
+        ImpactProject,
+        id=project_id,
+    )
+
+    if request.method == "POST":
+
+        form = ImpactRecordForm(request.POST)
+
+        if form.is_valid():
+
+            record = form.save(commit=False)
+
+            record.project = project
+
+            record.save()
+
+            messages.success(
+                request,
+                f'"{record.metric}" was added successfully.'
+            )
+
+            return redirect(
+                "project_detail",
+                project_id=project.id,
+            )
+
+    else:
+
+        form = ImpactRecordForm()
+
+    return render(
+        request,
+        "core/add_impact_record.html",
+        {
+            "form": form,
+            "project": project,
         },
     )

@@ -25,6 +25,12 @@ urlpatterns = [
     ),
 
     path(
+        "projects/<int:project_id>/impact/add/",
+        views.add_impact_record,
+        name="add_impact_record",
+    ),
+
+    path(
         "analytics/",
         views.analytics,
         name="analytics",
