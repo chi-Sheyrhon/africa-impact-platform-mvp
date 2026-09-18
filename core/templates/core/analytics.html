@@ -1,0 +1,207 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<h1>Impact Intelligence</h1>
+
+<p style="
+    margin: 15px 0 30px;
+    line-height: 1.7;
+    color: #6b7280;
+">
+    Explore aggregated data from impact projects across the platform.
+</p>
+
+
+<!-- Overview -->
+
+<h2 style="margin-bottom: 20px;">
+    Impact Overview
+</h2>
+
+<div class="projects">
+
+    <div class="card">
+
+        <p style="color: #6b7280;">
+            Total Projects
+        </p>
+
+        <h2 style="font-size: 36px; margin-top: 10px;">
+            {{ total_projects }}
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <p style="color: #6b7280;">
+            Active Projects
+        </p>
+
+        <h2 style="font-size: 36px; margin-top: 10px;">
+            {{ active_projects }}
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <p style="color: #6b7280;">
+            Countries Represented
+        </p>
+
+        <h2 style="font-size: 36px; margin-top: 10px;">
+            {{ countries_count }}
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <p style="color: #6b7280;">
+            Impact Records
+        </p>
+
+        <h2 style="font-size: 36px; margin-top: 10px;">
+            {{ total_records }}
+        </h2>
+
+    </div>
+
+</div>
+
+<!-- Impact Indicators -->
+
+<h2 style="margin-top: 50px; margin-bottom: 20px;">
+    Key Impact Indicators
+</h2>
+
+<div class="projects">
+
+    {% for item in impact_by_metric %}
+
+        <div class="card">
+
+            <p style="color: #6b7280;">
+                {{ item.metric|title }}
+            </p>
+
+            <h2 style="
+                font-size: 36px;
+                margin-top: 10px;
+            ">
+                {{ item.total|floatformat:"0" }}
+            </h2>
+
+            <p style="
+                margin-top: 8px;
+                color: #6b7280;
+            ">
+                {{ item.unit }}
+            </p>
+
+        </div>
+
+    {% empty %}
+
+        <p>
+            No impact indicators available.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+<!-- Projects by Area -->
+
+<h2 style="margin-top: 50px; margin-bottom: 20px;">
+    Projects by Impact Area
+</h2>
+
+<div class="projects">
+
+    {% for item in projects_by_area %}
+
+        <div class="card">
+
+            <h3>
+                {{ item.impact_area|title }}
+            </h3>
+
+            <h2 style="
+                font-size: 36px;
+                margin-top: 10px;
+            ">
+                {{ item.total }}
+            </h2>
+
+            <p>
+                project{{ item.total|pluralize }}
+            </p>
+
+        </div>
+
+    {% empty %}
+
+        <p>
+            No project data available.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+
+<!-- Records by Category -->
+
+<h2 style="margin-top: 50px; margin-bottom: 20px;">
+    Impact Records by Category
+</h2>
+
+<div class="projects">
+
+    {% for item in records_by_category %}
+
+        <div class="card">
+
+            <h3>
+                {{ item.impact_records__category|title }}
+            </h3>
+
+            <h2 style="
+                font-size: 36px;
+                margin-top: 10px;
+            ">
+                {{ item.total }}
+            </h2>
+
+            <p>
+                record{{ item.total|pluralize }}
+            </p>
+
+        </div>
+
+    {% empty %}
+
+        <p>
+            No impact records available.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+
+<a
+    href="{% url 'project_list' %}"
+    class="button"
+    style="margin-top: 40px;"
+>
+    Explore Projects
+</a>
+
+{% endblock %}

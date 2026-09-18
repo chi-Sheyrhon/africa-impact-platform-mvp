@@ -100,15 +100,52 @@
             margin-top: 60px;
             color: #6b7280;
         }
+
+        input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #ffffff;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #111827;
+}
     </style>
 </head>
 
 <body>
 
 <nav>
-    <a href="/" class="logo">🌍 Africa Impact Platform</a>
 
-    <a href="/projects/">Projects</a>
+    <a href="/" class="logo">
+        🌍 Africa Impact Platform
+    </a>
+
+    <div>
+            <a href="/projects/" style="margin-right: 20px;">
+        Projects
+    </a>
+
+    <a href="/projects/submit/" style="margin-right: 20px;">
+        Submit Project
+    </a>
+
+    <a href="/analytics/">
+        Impact Intelligence
+    </a>
+
+
+    </div>
+
 </nav>
 
 <div class="container">

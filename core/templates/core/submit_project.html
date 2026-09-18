@@ -1,0 +1,142 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+Submit a Project | Africa Impact Platform
+{% endblock %}
+
+{% block content %}
+
+<div style="
+    max-width: 800px;
+    margin: 0 auto;
+">
+
+    <h1>
+        Submit an Impact Project
+    </h1>
+
+    <p style="
+        margin: 15px 0 30px;
+        color: #6b7280;
+        line-height: 1.7;
+    ">
+        Share a project making a measurable difference in Africa.
+    </p>
+
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div style="
+                background: #ecfdf5;
+                border: 1px solid #a7f3d0;
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 25px;
+            ">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <div class="card">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            {% for field in form %}
+
+                <div style="margin-bottom: 22px;">
+
+                    <label
+                        for="{{ field.id_for_label }}"
+                        style="
+                            display: block;
+                            font-weight: bold;
+                            margin-bottom: 8px;
+                        "
+                    >
+                        {{ field.label }}
+                    </label>
+
+
+                    {{ field }}
+
+
+                    {% if field.help_text %}
+
+                        <small style="
+                            display: block;
+                            margin-top: 5px;
+                            color: #6b7280;
+                        ">
+                            {{ field.help_text }}
+                        </small>
+
+                    {% endif %}
+
+
+                    {% for error in field.errors %}
+
+                        <p style="
+                            color: #dc2626;
+                            margin-top: 5px;
+                        ">
+                            {{ error }}
+                        </p>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endfor %}
+
+
+            {% if form.non_field_errors %}
+
+                {% for error in form.non_field_errors %}
+
+                    <p style="
+                        color: #dc2626;
+                        margin-bottom: 15px;
+                    ">
+                        {{ error }}
+                    </p>
+
+                {% endfor %}
+
+            {% endif %}
+
+
+            <button
+                type="submit"
+                class="button"
+                style="border: none; cursor: pointer;"
+            >
+                Submit Project
+            </button>
+
+            <a
+                href="{% url 'project_list' %}"
+                class="button"
+                style="
+                    margin-left: 10px;
+                    background: #6b7280;
+                "
+            >
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

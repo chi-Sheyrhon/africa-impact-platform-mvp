@@ -1,14 +1,12 @@
 {% extends "core/base.html" %}
 
-{% block title %}
-Africa Impact Platform
-{% endblock %}
-
 {% block content %}
 
 <section class="hero">
 
-    <h1>Discover Impact Across Africa 🌍</h1>
+    <h1>
+        Discover Impact Across Africa 🌍
+    </h1>
 
     <p>
         Explore projects creating meaningful change across communities,
@@ -21,9 +19,200 @@ Africa Impact Platform
 
 </section>
 
-<h2>What is Africa Impact Platform?</h2>
 
-<p style="margin-top: 15px; line-height: 1.7;">
+<!-- Platform Statistics -->
+
+<h2 style="margin-bottom: 20px;">
+    Platform Impact
+</h2>
+
+
+<div class="projects">
+
+    <div class="card">
+
+        <p style="color: #6b7280;">
+            Total Projects
+        </p>
+
+        <h2 style="
+            font-size: 36px;
+            margin-top: 10px;
+        ">
+            {{ total_projects }}
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <p style="color: #6b7280;">
+            Active Projects
+        </p>
+
+        <h2 style="
+            font-size: 36px;
+            margin-top: 10px;
+        ">
+            {{ active_projects }}
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <p style="color: #6b7280;">
+            Countries Represented
+        </p>
+
+        <h2 style="
+            font-size: 36px;
+            margin-top: 10px;
+        ">
+            {{ countries_count }}
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <p style="color: #6b7280;">
+            Students Reached
+        </p>
+
+        <h2 style="
+            font-size: 36px;
+            margin-top: 10px;
+        ">
+            {{ people_reached|floatformat:"0" }}
+        </h2>
+
+    </div>
+
+</div>
+<!-- Impact Areas -->
+
+<h2 style="margin-top: 50px; margin-bottom: 20px;">
+    Impact by Sector
+</h2>
+
+<p style="
+    margin-bottom: 25px;
+    color: #6b7280;
+">
+    Distribution of projects across different impact areas.
+</p>
+
+<div class="projects">
+
+    {% for item in impact_area_stats %}
+
+        <div class="card">
+
+            <p style="color: #6b7280;">
+                Impact Area
+            </p>
+
+            <h3 style="margin-top: 10px;">
+                {{ item.impact_area|title }}
+            </h3>
+
+            <h2 style="
+                font-size: 36px;
+                margin-top: 10px;
+            ">
+                {{ item.total }}
+            </h2>
+
+            <p>
+                project{{ item.total|pluralize }}
+            </p>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- Featured Projects -->
+
+<h2 style="margin-top: 50px; margin-bottom: 20px;">
+    Featured Impact Projects
+</h2>
+
+<p style="
+    margin-bottom: 25px;
+    color: #6b7280;
+">
+    Explore some of the active projects currently creating impact.
+</p>
+
+
+<div class="projects">
+
+    {% for project in featured_projects %}
+
+        <div class="card">
+
+            <h3>
+                {{ project.name }}
+            </h3>
+
+            <p style="
+                margin-top: 12px;
+                line-height: 1.6;
+            ">
+                {{ project.description|truncatewords:20 }}
+            </p>
+
+            <p>
+                <strong>Country:</strong>
+                {{ project.country }}
+            </p>
+
+            <p>
+                <strong>Impact Area:</strong>
+                {{ project.get_impact_area_display }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                {{ project.get_status_display }}
+            </p>
+
+            <a
+                href="{% url 'project_detail' project.id %}"
+                class="button"
+            >
+                View Impact
+            </a>
+
+        </div>
+
+    {% empty %}
+
+        <p>
+            No active projects are available yet.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+
+<!-- About -->
+
+<h2 style="margin-top: 50px;">
+    What is Africa Impact Platform?
+</h2>
+
+<p style="
+    margin-top: 15px;
+    line-height: 1.7;
+">
     Africa Impact Platform is an initiative designed to help people
     discover, document and understand projects creating positive impact
     across African communities.

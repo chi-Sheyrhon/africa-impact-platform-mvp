@@ -1,9 +1,5 @@
 {% extends "core/base.html" %}
 
-{% block title %}
-Impact Projects
-{% endblock %}
-
 {% block content %}
 
 <h1>Impact Projects</h1>
@@ -11,6 +7,165 @@ Impact Projects
 <p style="margin: 15px 0 30px;">
     Explore projects making a difference across African communities.
 </p>
+
+
+<!-- Search and Filters -->
+
+<form method="get" style="margin-bottom: 40px;">
+
+    <div style="
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+    ">
+
+        <!-- Search -->
+
+        <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            placeholder="Search projects..."
+            style="
+                padding: 12px;
+                width: 300px;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+                font-size: 16px;
+            "
+        >
+
+
+        <!-- Country -->
+
+        <select
+            name="country"
+            style="
+                padding: 12px;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+                font-size: 16px;
+            "
+        >
+
+            <option value="">
+                All Countries
+            </option>
+
+            {% for country_option in countries %}
+
+                <option
+                    value="{{ country_option }}"
+                    {% if country == country_option %}selected{% endif %}
+                >
+                    {{ country_option }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <!-- Impact Area -->
+
+        <select
+            name="impact_area"
+            style="
+                padding: 12px;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+                font-size: 16px;
+            "
+        >
+
+            <option value="">
+                All Impact Areas
+            </option>
+
+            {% for value, label in impact_areas %}
+
+                <option
+                    value="{{ value }}"
+                    {% if impact_area == value %}selected{% endif %}
+                >
+                    {{ label }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <!-- Status -->
+
+        <select
+            name="status"
+            style="
+                padding: 12px;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+                font-size: 16px;
+            "
+        >
+
+            <option value="">
+                All Statuses
+            </option>
+
+            {% for value, label in statuses %}
+
+                <option
+                    value="{{ value }}"
+                    {% if status == value %}selected{% endif %}
+                >
+                    {{ label }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <!-- Submit -->
+
+        <button
+            type="submit"
+            style="
+                padding: 12px 20px;
+                border: none;
+                border-radius: 6px;
+                background: #111827;
+                color: white;
+                cursor: pointer;
+                font-size: 16px;
+            "
+        >
+            Apply Filters
+        </button>
+
+
+        <!-- Clear -->
+
+        <a
+            href="{% url 'project_list' %}"
+            style="
+                padding: 12px 20px;
+                text-decoration: none;
+                color: #111827;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+            "
+        >
+            Clear
+        </a>
+
+    </div>
+
+</form>
+
+
+<!-- Project Results -->
 
 <div class="projects">
 
@@ -27,6 +182,11 @@ Impact Projects
             <p>
                 <strong>Country:</strong>
                 {{ project.country }}
+            </p>
+
+            <p>
+                <strong>Location:</strong>
+                {{ project.location }}
             </p>
 
             <p>
@@ -51,7 +211,7 @@ Impact Projects
     {% empty %}
 
         <p>
-            No impact projects have been added yet.
+            No impact projects match your search or filters.
         </p>
 
     {% endfor %}

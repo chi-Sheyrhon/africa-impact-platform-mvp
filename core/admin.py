@@ -30,22 +30,24 @@ class ImpactProjectAdmin(admin.ModelAdmin):
         "location",
     )
 
-    @admin.register(ImpactRecord)
-    class ImpactReecordAdmin(admin.ModelAdmin):
-        list_display=(
-            "project",
-            "metric",
-            "value",
-            "unit",
-            "recorded_at",
-        )
+@admin.register(ImpactRecord)
+class ImpactRecordAdmin(admin.ModelAdmin):
 
-        list_filter=(
-            "unit",
-            "recorded_at",
-        )
+    list_display = (
+        "project",
+        "metric",
+        "category",
+        "value",
+        "unit",
+        "recorded_at",
+    )
 
-        search_fields=(
-            "metric",
-            "project__name",
-        )
+    list_filter = (
+        "category",
+        "recorded_at",
+    )
+
+    search_fields = (
+        "metric",
+        "project__name",
+    )
