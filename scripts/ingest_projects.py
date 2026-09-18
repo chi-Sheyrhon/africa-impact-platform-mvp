@@ -106,7 +106,18 @@ def main():
 
         if result:
             print()
-            print(result["message"])
+            print("Import completed.")
+            print(f"Created: {result['created']}")
+            print(f"Updated: {result['updated']}")
+            print(f"Failed: {result['failed']}")
+
+            if result["errors"]:
+                print()
+                print("Errors:")
+
+                for error in result["errors"]:
+                    print(error)
+       
 
     except FileNotFoundError:
         print(f"Data file not found: {DATA_FILE}")
