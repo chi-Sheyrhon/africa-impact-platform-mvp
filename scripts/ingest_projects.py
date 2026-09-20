@@ -5,7 +5,7 @@ import requests
 
 
 API_URL = "http://127.0.0.1:8000/api/projects/bulk/"
-DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "sample_projects.json"
+DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "real_projects_2023_2026.json"
 
 
 def load_projects():
